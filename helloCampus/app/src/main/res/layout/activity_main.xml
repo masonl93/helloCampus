@@ -11,5 +11,15 @@
 
     android:background="@drawable/wave">
 
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/search_hint"
+        android:inputType="textCapWords"
+        android:imeOptions="actionSearch" />
+
+
+
 
 </RelativeLayout>
