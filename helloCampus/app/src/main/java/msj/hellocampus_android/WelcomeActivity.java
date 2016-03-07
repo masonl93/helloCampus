@@ -83,6 +83,7 @@ public class WelcomeActivity extends FirebaseLoginBaseActivity {
     @Override
     public void onFirebaseLoggedOut() {
         // TODO: Handle logout
+
     }
 
     private void setup_firebase() {

@@ -62,6 +62,7 @@ public class SignUpActivity extends Activity {
         });
 
         startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     private void setup_firebase() {
