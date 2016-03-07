@@ -12,7 +12,7 @@ public class AddMemoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_node);
+        setContentView(R.layout.activity_add_memo);
         submitBtn = (Button) findViewById(R.id.submitMemoButton);
         submitBtn.setOnClickListener(submitBtnHandler);
     }

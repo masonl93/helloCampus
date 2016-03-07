@@ -34,7 +34,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/editText_name"
         android:layout_alignTop="@+id/textView"
         android:layout_toRightOf="@+id/textView"
         android:layout_toEndOf="@+id/textView"
@@ -53,8 +53,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Make Post"
-        android:id="@+id/button"
+        android:text="Create Node"
+        android:id="@+id/create_node"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
@@ -70,9 +70,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="66dp"
-        android:layout_above="@+id/button"
-        android:layout_alignRight="@+id/editText2"
-        android:layout_alignEnd="@+id/editText2" />
+        android:layout_above="@+id/create_node"
+        android:layout_alignRight="@+id/editText_name"
+        android:layout_alignEnd="@+id/editText_name" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -86,12 +86,12 @@
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/spinner"
+        android:id="@+id/spinner_type"
         android:entries="@array/dropdown_choices"
         android:spinnerMode="dialog"
         android:prompt="@string/dropdown_hint"
         android:layout_below="@+id/idCode"
-        android:layout_alignRight="@+id/editText2"
-        android:layout_alignEnd="@+id/editText2" />
+        android:layout_alignRight="@+id/editText_name"
+        android:layout_alignEnd="@+id/editText_name" />
 
 </RelativeLayout>
