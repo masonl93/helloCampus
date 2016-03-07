@@ -1,23 +1,14 @@
 package msj.hellocampus_android;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.Button;
 import android.content.Intent;
 import android.widget.TextView;
 
@@ -33,7 +24,7 @@ public class MainActivity extends FragmentActivity {
 
     Location lastKnownLocation;
     String locationProvider;
-    private Node temp = null;
+    private Node node_temp = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +78,12 @@ public class MainActivity extends FragmentActivity {
                                     // if not, ask user to turn on location services and/or wifi/data so we can get location,
                                     // and return to search page
                                     //nodeFound(node);
-                                    temp = node;
+                                    node_temp = node;
                                     break;
                                 }
                             }
-                            if(temp != null){
-                                nodeFound(temp);
+                            if(node_temp != null){
+                                nodeFound(node_temp);
                             }
                             else{
                                 nodeNotFound(input);
@@ -203,11 +194,11 @@ public class MainActivity extends FragmentActivity {
     private void nodeFound(final Node node) {
         final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
         alertDialog.setTitle("Discoverey!");
-        alertDialog.setMessage("You discovered" + node.getName() + "!\n\nWould you like to explore this node?");
+        alertDialog.setMessage("You discovered " + node.getName() + "!\n\nWould you like to explore this node?");
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent i = new Intent(MainActivity.this, viewNodeActivity.class);
+                        Intent i = new Intent(MainActivity.this, ViewNodeActivity.class);
                         Bundle b = new Bundle();
                         b.putString("key", node.getId());
                         i.putExtras(b);
@@ -220,7 +211,7 @@ public class MainActivity extends FragmentActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        temp = null;
+                        node_temp = null;
                     }
                 });
         alertDialog.show();
@@ -233,7 +224,7 @@ public class MainActivity extends FragmentActivity {
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent i = new Intent(MainActivity.this, createNodeActivity.class);
+                        Intent i = new Intent(MainActivity.this, CreateNodeActivity.class);
                         Bundle b = new Bundle();
                         b.putString("key", id);
                         i.putExtras(b);
@@ -246,7 +237,7 @@ public class MainActivity extends FragmentActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        temp = null;
+                        node_temp = null;
                     }
                 });
         alertDialog.show();

@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import android.R.layout;
 
-public class memoListActivity extends ListActivity {
+public class MemoListActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class memoListActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         String item = (String) getListAdapter().getItem(position);
-        AlertDialog alertDialog = new AlertDialog.Builder(memoListActivity.this).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(MemoListActivity.this).create();
         alertDialog.setTitle(item);
         alertDialog.setMessage("Message Text");
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",

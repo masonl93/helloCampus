@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class viewNodeActivity extends AppCompatActivity {
+public class ViewNodeActivity extends AppCompatActivity {
 
     Button addMemo;
     Button viewMemo;
@@ -25,12 +25,12 @@ public class viewNodeActivity extends AppCompatActivity {
 
     View.OnClickListener addMemoHandler = new View.OnClickListener() {
         public void onClick(View v) {
-            startActivity(new Intent(v.getContext(), addNodeActivity.class));
+            startActivity(new Intent(v.getContext(), AddMemoActivity.class));
         }
     };
     View.OnClickListener viewMemoHandler = new View.OnClickListener() {
         public void onClick(View v) {
-            startActivity(new Intent(v.getContext(), memoListActivity.class));
+            startActivity(new Intent(v.getContext(), MemoListActivity.class));
         }
     };
 
