@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Placeholder"
-        android:id="@+id/textView11"
+        android:id="@+id/textView_id"
         android:layout_alignBottom="@+id/textView10"
         android:layout_centerHorizontal="true" />
 
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Placeholder"
-        android:id="@+id/textView13"
+        android:id="@+id/textView_name"
         android:layout_alignBottom="@+id/textView12"
         android:layout_toRightOf="@+id/textView12"
         android:layout_toEndOf="@+id/textView12"

@@ -102,6 +102,8 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
+
+    /* currently ignore, just some location BS */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
