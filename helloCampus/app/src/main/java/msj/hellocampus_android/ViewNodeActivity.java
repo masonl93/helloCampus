@@ -14,22 +14,31 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ViewNodeActivity extends AppCompatActivity {
 
     private Node node = null;
+    private String node_key = null;
+    List<String> memos = new ArrayList<String>();
+    String memo;
     Button addMemo;
     Button viewMemo;
+    TextView textView_memo;
+    Firebase mRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mRef = new Firebase(getResources().getString(R.string.firebase_url));
 
+        // Getting node id that was passed from either MainAcivity or CreateNodeActivity
         Bundle b = getIntent().getExtras();
-        final String new_id = b.getString("key");
+        final String node_id = b.getString("key");
 
         Firebase.setAndroidContext(this);
-        final Firebase mPostsRef = new Firebase(getResources().getString(R.string.firebase_url)).child("nodes");
 
         setContentView(R.layout.activity_view_node);
         addMemo = (Button) findViewById(R.id.addMemoButton);
@@ -38,13 +47,15 @@ public class ViewNodeActivity extends AppCompatActivity {
         viewMemo.setOnClickListener(viewMemoHandler);
         ListView memoList = new ListView(this);
 
-        mPostsRef.addValueEventListener(new ValueEventListener() {
+        mRef.child("nodes").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                // find our node and get its key
                 for (DataSnapshot nodeSnapshot : snapshot.getChildren()) {
                     Node n = nodeSnapshot.getValue(Node.class);
-                    if (n.getId().equals(new_id)) {
+                    if (n.getId().equals(node_id)) {
                         node = n;
+                        node_key = nodeSnapshot.getKey();
                         break;
                     }
                 }
@@ -58,6 +69,30 @@ public class ViewNodeActivity extends AppCompatActivity {
                 TextView textView_name = (TextView) findViewById(R.id.textView_name);
                 textView_name.setText(node.getName());
 
+                // Inserting the most recent memo for the Node
+                textView_memo = (TextView) findViewById(R.id.textView_memo);
+                mRef.child("memos").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        System.out.println("There are " + snapshot.getChildrenCount() + " memos");
+                        for (DataSnapshot nodeSnapshot : snapshot.getChildren()) {
+                            Memo m = nodeSnapshot.getValue(Memo.class);
+                            System.out.println(m.getMessage());
+                            System.out.println(m.getNode_key() + "     " + node_key);
+                            if (m.getNode_key().equals(node_key)) {
+                                memos.add(m.getMessage());
+                            }
+                        }
+                        System.out.println(memos);
+                        memo = memos.get(memos.size() - 1);
+                        textView_memo.setText(memo);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                        System.out.println("The read failed: " + firebaseError.getMessage());
+                    }
+                });
             }
 
             @Override

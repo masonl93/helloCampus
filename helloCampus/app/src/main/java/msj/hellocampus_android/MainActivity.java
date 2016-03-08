@@ -2,8 +2,6 @@ package msj.hellocampus_android;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -22,38 +20,14 @@ import com.firebase.client.ValueEventListener;
 
 public class MainActivity extends FragmentActivity {
 
-    Location lastKnownLocation;
-    String locationProvider;
     private Node node_temp = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationProvider = LocationManager.NETWORK_PROVIDER;
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    2);
-        }
-
-        lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-
-        if (lastKnownLocation == null) {
-            locationProvider = LocationManager.GPS_PROVIDER;
-            lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        }
-        double lat = lastKnownLocation.getLatitude();
-        double lng = lastKnownLocation.getLongitude();
-        System.out.println("LATITUDE " + lat);
-        System.out.println("LONGITUDE " + lng);
-        */
-
-
         Firebase.setAndroidContext(this);
-        final Firebase mPostsRef = new Firebase(getResources().getString(R.string.firebase_url)).child("nodes");
+        final Firebase mNodesRef = new Firebase(getResources().getString(R.string.firebase_url)).child("nodes");
 
         setContentView(R.layout.activity_main);
 
@@ -65,7 +39,7 @@ public class MainActivity extends FragmentActivity {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     final String input = editText.getText().toString();
 
-                    mPostsRef.addValueEventListener(new ValueEventListener() {
+                    mNodesRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
                             System.out.println("There are " + snapshot.getChildrenCount() + " nodes");
@@ -102,30 +76,13 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
-
-    /* currently ignore, just some location BS */
+    // back button takes you to home screen again
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 2: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    startActivity(new Intent(this, MainActivity.class));
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        startActivity(intent);
     }
 
     private void nodeFound(final Node node) {

@@ -15,7 +15,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Node ID#:"
         android:id="@+id/idCode"
-        android:layout_marginTop="26dp"
+        android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -26,19 +26,24 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Node Nickname:"
         android:id="@+id/textView"
-        android:layout_above="@+id/textView2"
+        android:layout_below="@+id/spinner_type"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="40dp" />
+        android:textStyle="bold"
+        android:paddingTop="10dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editText_name"
-        android:layout_alignTop="@+id/textView"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView"
-        android:hint="Think of something clever" />
+        android:hint="Enter nickname..."
+        android:background="@android:color/transparent"
+        android:layout_alignBottom="@+id/textView"
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_toEndOf="@+id/textView2"
+        android:textStyle="italic"
+        android:inputType="textNoSuggestions|textFilter|text"
+        android:textCursorDrawable="@null"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,9 +51,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Memo Description"
         android:id="@+id/textView2"
-        android:layout_centerVertical="true"
+        android:textStyle="bold"
+        android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="26dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -56,23 +63,32 @@
         android:text="Create Node"
         android:id="@+id/create_node"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        style="@style/DefaultButtonText"
+        android:background="@layout/button_default_bg"
+        android:textStyle="bold"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
+        android:inputType="textNoSuggestions|textFilter|textMultiLine"
         android:ems="10"
-        android:id="@+id/editText3"
+        android:id="@+id/editText_memo"
         android:shadowColor="#a6a6a6"
         android:hint="Leave a message for future users to read!"
+        android:background="@drawable/shape"
+        android:maxLength="255"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/create_node"
         android:layout_below="@+id/textView2"
+        android:textAlignment="center"
+        android:textStyle="italic"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="66dp"
-        android:layout_above="@+id/create_node"
-        android:layout_alignRight="@+id/editText_name"
-        android:layout_alignEnd="@+id/editText_name" />
+        android:textCursorDrawable="@null"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -81,7 +97,8 @@
         android:text="ID Placeholder"
         android:id="@+id/node_id"
         android:layout_alignTop="@+id/idCode"
-        android:layout_centerHorizontal="true" />
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_toEndOf="@+id/textView2" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -90,8 +107,20 @@
         android:entries="@array/dropdown_choices"
         android:spinnerMode="dialog"
         android:prompt="@string/dropdown_hint"
-        android:layout_below="@+id/idCode"
-        android:layout_alignRight="@+id/editText_name"
-        android:layout_alignEnd="@+id/editText_name" />
+        android:layout_below="@+id/node_id"
+        android:layout_alignLeft="@+id/editText_name"
+        android:layout_alignStart="@+id/editText_name"
+        android:layout_marginTop="34dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Type of Node:"
+        android:id="@+id/textView3"
+        android:textStyle="bold"
+        android:layout_alignTop="@+id/spinner_type"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
