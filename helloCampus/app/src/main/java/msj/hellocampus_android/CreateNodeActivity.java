@@ -59,9 +59,9 @@ public class CreateNodeActivity extends AppCompatActivity {
                 String node_Id = newNodeRef.getKey();
 
                 // Create new memo object
-                // Add it to database
-                Memo m = new Memo(memo, user_id, node_Id);
-                mRef.child("memos").push().setValue(m);
+                // Add it to database at firebase_url/nodes/node_id/memos
+                Memo m = new Memo(memo, user_id);
+                mNodesRef.child(node_Id).child("memos").push().setValue(m);
 
                 // View the node now, pass node id to activity
                 Intent i = new Intent(CreateNodeActivity.this, ViewNodeActivity.class);

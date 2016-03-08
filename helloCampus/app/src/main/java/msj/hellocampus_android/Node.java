@@ -1,10 +1,16 @@
 package msj.hellocampus_android;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.firebase.geofire.GeoLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Mason on 3/6/16.
  */
+
+@JsonIgnoreProperties({ "memos" })
 public class Node {
 
     private String id;

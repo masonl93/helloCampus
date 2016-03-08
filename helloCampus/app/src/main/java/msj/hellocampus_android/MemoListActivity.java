@@ -18,7 +18,7 @@ import com.firebase.ui.FirebaseListAdapter;
 
 public class MemoListActivity extends ListActivity {
 
-    private FirebaseListAdapter<Node> mAdapter;
+    private FirebaseListAdapter<Memo> mAdapter;
     ListView memoList;
 
     @Override
@@ -28,17 +28,21 @@ public class MemoListActivity extends ListActivity {
 
         //ListView memoList = (ListView) findViewById(R.id.list);
 
+        // Getting node ID from ViewNodeActivity
+        Bundle b = getIntent().getExtras();
+        String node_key = b.getString("key");
+
         ListView memoList = getListView();
 
         Firebase.setAndroidContext(this);
-        Firebase ref = new Firebase("https://crackling-torch-8127.firebaseio.com/nodes");
+        Firebase mMemosRef = new Firebase(getResources().getString(R.string.firebase_url)).child("nodes").child(node_key).child("memos");
 
-        mAdapter = new FirebaseListAdapter<Node>(this, Node.class, layout.two_line_list_item, ref) {
+        mAdapter = new FirebaseListAdapter<Memo>(this, Memo.class, layout.two_line_list_item, mMemosRef) {
             @Override
-            protected void populateView(View view, Node node, int position) {
+            protected void populateView(View view, Memo memo, int position) {
                 //replace 'node.getX' with memo.getTitle OR memo.getMemo
-                ((TextView) view.findViewById(android.R.id.text1)).setText(node.getName());
-                ((TextView) view.findViewById(android.R.id.text2)).setText(node.getType());
+                ((TextView) view.findViewById(android.R.id.text1)).setText(memo.getMessage());
+                ((TextView) view.findViewById(android.R.id.text2)).setText(memo.getMessage());
             }
         };
         memoList.setAdapter(mAdapter);
@@ -46,11 +50,11 @@ public class MemoListActivity extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        Node item = (Node) getListView().getItemAtPosition(position);
+        Memo item = (Memo) getListView().getItemAtPosition(position);
         AlertDialog alertDialog = new AlertDialog.Builder(MemoListActivity.this).create();
         //replace 'item.getX' with item.getTitle OR item.getMemo
-        alertDialog.setTitle(item.getName());
-        alertDialog.setMessage(item.getType());
+        alertDialog.setTitle(item.getMessage());
+        alertDialog.setMessage(item.getMessage());
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

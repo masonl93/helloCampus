@@ -31,14 +31,13 @@ public class ViewNodeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
 
         mRef = new Firebase(getResources().getString(R.string.firebase_url));
 
         // Getting node id that was passed from either MainAcivity or CreateNodeActivity
         Bundle b = getIntent().getExtras();
         final String node_id = b.getString("key");
-
-        Firebase.setAndroidContext(this);
 
         setContentView(R.layout.activity_view_node);
         addMemo = (Button) findViewById(R.id.addMemoButton);
@@ -69,22 +68,21 @@ public class ViewNodeActivity extends AppCompatActivity {
                 TextView textView_name = (TextView) findViewById(R.id.textView_name);
                 textView_name.setText(node.getName());
 
-                // Inserting the most recent memo for the Node
+                // Inserting the most recent memo for the Node into the view
                 textView_memo = (TextView) findViewById(R.id.textView_memo);
-                mRef.child("memos").addValueEventListener(new ValueEventListener() {
+                mRef.child("nodes").child(node_key).child("memos").limitToLast(1).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         System.out.println("There are " + snapshot.getChildrenCount() + " memos");
+
                         for (DataSnapshot nodeSnapshot : snapshot.getChildren()) {
                             Memo m = nodeSnapshot.getValue(Memo.class);
-                            System.out.println(m.getMessage());
-                            System.out.println(m.getNode_key() + "     " + node_key);
-                            if (m.getNode_key().equals(node_key)) {
-                                memos.add(m.getMessage());
-                            }
+                            memo = m.getMessage();
                         }
-                        System.out.println(memos);
-                        memo = memos.get(memos.size() - 1);
+
+
+                        //System.out.println(memos);
+                        //memo = memos.get(memos.size() - 1);
                         textView_memo.setText(memo);
                     }
 
@@ -109,7 +107,12 @@ public class ViewNodeActivity extends AppCompatActivity {
     };
     View.OnClickListener viewMemoHandler = new View.OnClickListener() {
         public void onClick(View v) {
-            startActivity(new Intent(v.getContext(), MemoListActivity.class));
+            Intent i = new Intent(v.getContext(), MemoListActivity.class);
+            Bundle b = new Bundle();
+            b.putString("key", node_key);
+            i.putExtras(b);
+            startActivity(i);
+            //startActivity(new Intent(v.getContext(), MemoListActivity.class));
         }
     };
 
