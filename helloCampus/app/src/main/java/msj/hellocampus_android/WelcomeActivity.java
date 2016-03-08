@@ -15,6 +15,7 @@ import com.firebase.client.Firebase;
 import com.firebase.ui.auth.core.AuthProviderType;
 import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
 import com.firebase.ui.auth.core.FirebaseLoginError;
+import com.parse.Parse;
 
 /**
  * Created by Mason on 2/22/16.
