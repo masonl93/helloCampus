@@ -26,6 +26,10 @@
         <activity android:name=".AddMemoActivity" />
         <activity android:name=".ViewNodeActivity" />
         <activity android:name=".MemoListActivity"></activity>
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps">
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

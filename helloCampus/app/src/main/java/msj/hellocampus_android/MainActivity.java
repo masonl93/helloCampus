@@ -7,13 +7,14 @@ import android.content.DialogInterface;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.content.Intent;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 
 
+
 public class MainActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private Node node_temp = null;
@@ -38,11 +40,10 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
     private LocationRequest mLocationRequest;
     public static final String TAG = Activity.class.getSimpleName();
     private double lat, lng;
-
+    private Button mapsBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Firebase.setAndroidContext(this);
         final Firebase mNodesRef = new Firebase(getResources().getString(R.string.firebase_url)).child("nodes");
 
@@ -62,13 +63,27 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                 .setFastestInterval(1 * 1000); // 1 second, in milliseconds
 
         final EditText editText = (EditText) findViewById(R.id.search);
+        mapsBtn = (Button) findViewById(R.id.mapButton);
+        mapsBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, MapsActivity.class);
+                Bundle b = new Bundle();
+                b.putDouble("lat", lat);
+                System.out.println("lat: " + lat);
+                System.out.println("lng: " + lng);
+                b.putDouble("lng", lng);
+                i.putExtras(b);
+                startActivity(i);
+                // Starts an intent for the sign up activity
+                //startActivity(new Intent(MainActivity.this, MapsActivity.class));
+            }
+        });
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     final String input = editText.getText().toString();
-
                     mNodesRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
@@ -88,8 +103,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                             }
                             if (node_temp != null) {
                                 nodeFound(node_temp);
-                            }
-                            else{
+                            } else {
                                 nodeNotFound(input);
                             }
                         }
@@ -114,7 +128,6 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
         intent.addCategory(Intent.CATEGORY_HOME);
         startActivity(intent);
     }
-
     private void nodeFound(final Node node) {
         final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
         alertDialog.setTitle("Discovery!");
@@ -177,10 +190,9 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
             System.out.println("Permissions are chill.");
         }
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (location == null){
+        if (location == null) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        }
-        else{
+        } else {
             handleNewLocation(location);
         }
     }
@@ -205,22 +217,22 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
         }
     }
 
-    private void handleNewLocation(Location location){
+    private void handleNewLocation(Location location) {
         lat = location.getLatitude();
         lng = location.getLongitude();
         Log.d(TAG, location.toString());
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         mGoogleApiClient.connect();
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
-        if (mGoogleApiClient.isConnected()){
+        if (mGoogleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }

@@ -73,7 +73,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         // Add a marker in Sydney and move the camera
-        LatLng ucsb = new LatLng(34.4137563, -119.8412435);
+        //LatLng ucsb = new LatLng(34.4137563, -119.8412435);
+        LatLng ucsb = new LatLng(lat, lng);
         mMap.addMarker(new MarkerOptions().position(ucsb).title("Your Location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ucsb, 16));
        // mMap.moveCamera(CameraUpdateFactory.newLatLng(ucsb));
