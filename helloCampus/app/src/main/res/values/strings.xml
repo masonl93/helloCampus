@@ -10,4 +10,5 @@
     </string-array>
     <string name="dropdown_hint">Node Type</string>
     <string name="title_activity_add_post">addPostActivity</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCuP3juOujF95ltX628jUt11Gz32eeqHxc</string>
 </resources>
