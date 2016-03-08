@@ -17,6 +17,7 @@
         <activity android:name=".DispatchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -25,16 +26,24 @@
         <activity android:name=".CreateNodeActivity" />
         <activity android:name=".AddMemoActivity" />
         <activity android:name=".ViewNodeActivity" />
-        <activity android:name=".MemoListActivity"></activity>
+        <activity android:name=".MemoListActivity" />
+        <meta-data
+            android:name="com.parse.APPLICATION_ID"
+            android:value="UyLOPoTty4xDWUHdwGp1JmPlLgDGXAEKGO5hDoU2" />
+        <meta-data
+            android:name="com.parse.CLIENT_KEY"
+            android:value="gvanC6phfFpzNsmSKTvN76Apu9UTbFGdqbt4Tfr7" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>
