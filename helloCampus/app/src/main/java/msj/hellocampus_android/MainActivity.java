@@ -37,6 +37,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private LocationRequest mLocationRequest;
     public static final String TAG = Activity.class.getSimpleName();
+    private double lat, lng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,8 +126,8 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                         Bundle b = new Bundle();
                         b.putString("key", node.getId());
                         i.putExtras(b);
-                        startActivity(i);
                         dialog.dismiss();
+                        startActivity(i);
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "No",
@@ -150,9 +151,11 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                         Intent i = new Intent(MainActivity.this, CreateNodeActivity.class);
                         Bundle b = new Bundle();
                         b.putString("key", id);
+                        b.putDouble("lat", lat);
+                        b.putDouble("lng", lng);
                         i.putExtras(b);
-                        startActivity(i);
                         dialog.dismiss();
+                        startActivity(i);
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "No",
@@ -170,6 +173,9 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
     public void onConnected(Bundle bundle) {
         System.out.println("onConnected bitch");
         Log.i(TAG, "Location services connected.");
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            System.out.println("Permissions are chill.");
+        }
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (location == null){
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -200,6 +206,8 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
     }
 
     private void handleNewLocation(Location location){
+        lat = location.getLatitude();
+        lng = location.getLongitude();
         Log.d(TAG, location.toString());
     }
 

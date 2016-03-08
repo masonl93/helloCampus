@@ -31,6 +31,8 @@ public class CreateNodeActivity extends AppCompatActivity {
         // Getting node ID from MainActivity
         Bundle b = getIntent().getExtras();
         final String new_id = b.getString("key");
+        final double lat = b.getDouble("lat");
+        final double lng = b.getDouble("lng");
 
         TextView textView_id = (TextView) findViewById(R.id.node_id);
         textView_id.setText(new_id);
@@ -51,8 +53,7 @@ public class CreateNodeActivity extends AppCompatActivity {
                 final String memo = editText_memo.getText().toString();
                 //final String title = editText_title.getText().toString();
 
-                // INSERT USERS LAT AND LONG below, not 0,0
-                GeoLocation g = new GeoLocation(0, 0);
+                GeoLocation g = new GeoLocation(lat, lng);
 
                 // Create new node object
                 // Add it to database, and get its key
