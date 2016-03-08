@@ -21,6 +21,8 @@ public class ViewNodeActivity extends AppCompatActivity {
 
     private Node node = null;
     private String node_key = null;
+    private String node_id;
+    private String node_name;
     List<String> memos = new ArrayList<String>();
     String memo;
     Button addMemo;
@@ -37,7 +39,7 @@ public class ViewNodeActivity extends AppCompatActivity {
 
         // Getting node id that was passed from either MainAcivity or CreateNodeActivity
         Bundle b = getIntent().getExtras();
-        final String node_id = b.getString("key");
+        node_id = b.getString("key");
 
         setContentView(R.layout.activity_view_node);
         addMemo = (Button) findViewById(R.id.addMemoButton);
@@ -65,8 +67,9 @@ public class ViewNodeActivity extends AppCompatActivity {
                 TextView textView_id = (TextView) findViewById(R.id.textView_id);
                 textView_id.setText(node.getId());
 
+                node_name = node.getName();
                 TextView textView_name = (TextView) findViewById(R.id.textView_name);
-                textView_name.setText(node.getName());
+                textView_name.setText(node_name);
 
                 // Inserting the most recent memo for the Node into the view
                 textView_memo = (TextView) findViewById(R.id.textView_memo);
@@ -102,7 +105,14 @@ public class ViewNodeActivity extends AppCompatActivity {
 
     View.OnClickListener addMemoHandler = new View.OnClickListener() {
         public void onClick(View v) {
-            startActivity(new Intent(v.getContext(), AddMemoActivity.class));
+            Intent i = new Intent(v.getContext(), AddMemoActivity.class);
+            Bundle b = new Bundle();
+            b.putString("key", node_key);
+            b.putString("id", node_id);
+            b.putString("name", node_name);
+            i.putExtras(b);
+            startActivity(i);
+            //startActivity(new Intent(v.getContext(), AddMemoActivity.class));
         }
     };
     View.OnClickListener viewMemoHandler = new View.OnClickListener() {

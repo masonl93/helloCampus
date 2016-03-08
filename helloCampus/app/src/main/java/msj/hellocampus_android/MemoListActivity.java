@@ -41,7 +41,7 @@ public class MemoListActivity extends ListActivity {
             @Override
             protected void populateView(View view, Memo memo, int position) {
                 //replace 'node.getX' with memo.getTitle OR memo.getMemo
-                ((TextView) view.findViewById(android.R.id.text1)).setText(memo.getMessage());
+                ((TextView) view.findViewById(android.R.id.text1)).setText(memo.getTitle());
                 ((TextView) view.findViewById(android.R.id.text2)).setText(memo.getMessage());
             }
         };
@@ -53,7 +53,7 @@ public class MemoListActivity extends ListActivity {
         Memo item = (Memo) getListView().getItemAtPosition(position);
         AlertDialog alertDialog = new AlertDialog.Builder(MemoListActivity.this).create();
         //replace 'item.getX' with item.getTitle OR item.getMemo
-        alertDialog.setTitle(item.getMessage());
+        alertDialog.setTitle(item.getTitle());
         alertDialog.setMessage(item.getMessage());
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                 new DialogInterface.OnClickListener() {

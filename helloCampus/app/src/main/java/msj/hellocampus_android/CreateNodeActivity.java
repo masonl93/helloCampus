@@ -38,6 +38,7 @@ public class CreateNodeActivity extends AppCompatActivity {
         final EditText editText_name = (EditText) findViewById(R.id.editText_name);
         final Spinner spinner_type = (Spinner) findViewById(R.id.spinner_type);
         final EditText editText_memo = (EditText) findViewById(R.id.editText_memo);
+        final EditText editText_title = (EditText) findViewById(R.id.editText_title);
 
         // Create node button
         Button new_btn = (Button) findViewById(R.id.create_node);
@@ -48,6 +49,7 @@ public class CreateNodeActivity extends AppCompatActivity {
                 final String name = editText_name.getText().toString();
                 final String type = spinner_type.getSelectedItem().toString();
                 final String memo = editText_memo.getText().toString();
+                //final String title = editText_title.getText().toString();
 
                 // INSERT USERS LAT AND LONG below, not 0,0
                 GeoLocation g = new GeoLocation(0, 0);
@@ -60,7 +62,7 @@ public class CreateNodeActivity extends AppCompatActivity {
 
                 // Create new memo object
                 // Add it to database at firebase_url/nodes/node_id/memos
-                Memo m = new Memo(memo, user_id);
+                Memo m = new Memo(memo, user_id, "First Memo");   //change last argument to title, not string
                 mNodesRef.child(node_Id).child("memos").push().setValue(m);
 
                 // View the node now, pass node id to activity

@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Node ID#:"
-        android:id="@+id/textView4"
+        android:id="@+id/textView_memo"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -26,21 +26,21 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Placeholder"
-        android:id="@+id/textView5"
+        android:id="@+id/textView_id"
         android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/textView7"
-        android:layout_alignStart="@+id/textView7" />
+        android:layout_alignLeft="@+id/textView_name"
+        android:layout_alignStart="@+id/textView_name" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Placeholder"
-        android:id="@+id/textView7"
+        android:id="@+id/textView_name"
         android:layout_gravity="center_vertical"
         android:layout_alignTop="@+id/textView6"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText" />
+        android:layout_alignLeft="@+id/editText_title"
+        android:layout_alignStart="@+id/editText_title" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Node Type:"
         android:id="@+id/textView6"
-        android:layout_below="@+id/textView4"
+        android:layout_below="@+id/textView_memo"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="29dp"
@@ -67,7 +67,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/editText_title"
         android:hint="Enter memo title..."
         android:textStyle="italic"
         android:autoText="false"
@@ -79,8 +79,8 @@
         android:layout_toRightOf="@+id/textView8"
         android:layout_marginLeft="34dp"
         android:layout_marginStart="34dp"
-        android:layout_alignRight="@+id/editText4"
-        android:layout_alignEnd="@+id/editText4"
+        android:layout_alignRight="@+id/editText_memo"
+        android:layout_alignEnd="@+id/editText_memo"
         android:textCursorDrawable="@null"/>
 
     <TextView
@@ -113,7 +113,7 @@
         android:layout_height="wrap_content"
         android:inputType="textNoSuggestions|textFilter|textMultiLine"
         android:ems="10"
-        android:id="@+id/editText4"
+        android:id="@+id/editText_memo"
         android:hint="Leave a memo for future explorers to find!"
         android:textStyle="italic"
         android:maxLength="255"

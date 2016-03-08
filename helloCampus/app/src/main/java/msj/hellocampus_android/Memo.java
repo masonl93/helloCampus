@@ -8,13 +8,15 @@ public class Memo {
 
     private String message;
     private String user;
+    private String title;
 
     public Memo() {
     }
 
-    public Memo(String message, String author) {
+    public Memo(String message, String author, String title) {
         this.message = message;
         this.user = author;
+        this.title = title;
     }
 
     public String getMessage() {
@@ -24,5 +26,7 @@ public class Memo {
     public String getUser() {
         return user;
     }
+
+    public String getTitle() { return title; }
 
 }
