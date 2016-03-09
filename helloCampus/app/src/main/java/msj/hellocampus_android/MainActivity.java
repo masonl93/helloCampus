@@ -40,7 +40,10 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
     private LocationRequest mLocationRequest;
     public static final String TAG = Activity.class.getSimpleName();
     private double lat, lng;
+    private Location user_location;
     private Button mapsBtn;
+    private boolean near_node = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,18 +95,32 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                                 Node node = nodeSnapshot.getValue(Node.class);
                                 System.out.println(node.getId());
                                 if (node.getId().equals(input)) {
-                                    // check if my location is close to node's location
-                                    // if so, return node's posts
-                                    // if not, ask user to turn on location services and/or wifi/data so we can get location,
-                                    // and return to search page
-                                    //nodeFound(node);
-                                    node_temp = node;
-                                    break;
+                                    // Determine how far the user is from the node
+                                    Location node_location = new Location("");
+                                    node_location.setLatitude(node.getLatitude());
+                                    node_location.setLongitude(node.getLongitude());
+                                    float dist_in_meters = node_location.distanceTo(user_location);
+                                    // if more than 50 meters, then either not close enough
+                                    // or we are close enough but there are two nodes with
+                                    // same ID codes
+                                    if (dist_in_meters > 50) {
+                                        near_node = false;
+                                    }
+                                    else {
+                                        node_temp = node;
+                                        near_node = true;
+                                        break;
+                                    }
                                 }
                             }
                             if (node_temp != null) {
                                 nodeFound(node_temp);
-                            } else {
+                            }
+                            // not close enough to node, notify user to move closer
+                            else if (!near_node){
+                                nodify_not_near_node(input);
+                            }
+                            else {
                                 nodeNotFound(input);
                             }
                         }
@@ -182,6 +199,21 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
         alertDialog.show();
     }
 
+    private void nodify_not_near_node(final String id) {
+        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+        alertDialog.setTitle("Not close enough to the node!");
+        alertDialog.setMessage("Be at least 30 meters from the object and try again");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        node_temp = null;
+                    }
+                });
+        alertDialog.show();
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
         System.out.println("onConnected bitch");
@@ -220,6 +252,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
     private void handleNewLocation(Location location) {
         lat = location.getLatitude();
         lng = location.getLongitude();
+        user_location = location;
         Log.d(TAG, location.toString());
     }
 
