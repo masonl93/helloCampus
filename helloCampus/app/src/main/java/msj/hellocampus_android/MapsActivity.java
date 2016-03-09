@@ -11,7 +11,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -60,13 +63,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     double b = node.getLongitude();
                     System.out.println("lng:" + b);
                     String type = node.getType();
+                    System.out.println(type);
+                    BitmapDescriptor color;
+                    switch (type) {
+                        case "Light Post": color = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                            break;
+                        case "Trash Can": color = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET);
+                            break;
+                        case "Utility Box": color = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN);
+                            break;
+                        case "Water Fountain": color = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+                            break;
+                        default: color = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                            break;
+                    }
+                    LatLng bob = new LatLng(a, b);
+                    Marker m = mMap.addMarker(new MarkerOptions().position(bob).title(type).icon(color));
+                    System.out.println(m.getPosition());
+
+                    /*
                     if (a != 0 && b != 0) {
                         LatLng bob = new LatLng(a, b);
-                        mMap.addMarker(new MarkerOptions().position(bob).title(type));
-
-                    }
-                    }
+                        Marker m mMap.addMarker(new MarkerOptions().position(bob).title(type));
+                        System.out.println("add marker");
+                    }*/
                 }
+            }
             @Override
             public void onCancelled(FirebaseError firebaseError) {
                 System.out.println("The read failed: " + firebaseError.getMessage());
