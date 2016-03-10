@@ -1,6 +1,7 @@
 package msj.hellocampus_android;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,9 +11,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.firebase.client.Firebase;
+import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 
-public class CreateNodeActivity extends AppCompatActivity {
+public class CreateNodeActivity extends FragmentActivity {
+
+    private GeoFire geoFire;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,9 @@ public class CreateNodeActivity extends AppCompatActivity {
         final String user_id = mRef.getAuth().getUid();
         final Firebase mNodesRef = mRef.child("nodes");
         final Firebase newNodeRef = mNodesRef.push();
+
+        // Geofire database setup
+        geoFire = new GeoFire(new Firebase(getResources().getString(R.string.firebase_url)).child("_geofire"));
 
 
         // Getting node ID from MainActivity
@@ -60,6 +67,9 @@ public class CreateNodeActivity extends AppCompatActivity {
                 Node n = new Node(new_id, type, name, g);
                 newNodeRef.setValue(n);
                 String node_Id = newNodeRef.getKey();
+
+                // Add node location to Geofire database
+                geoFire.setLocation(node_Id, g);
 
                 // Create new memo object
                 // Add it to database at firebase_url/nodes/node_id/memos

@@ -1,6 +1,7 @@
 package msj.hellocampus_android;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +14,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-public class AddMemoActivity extends AppCompatActivity {
+public class AddMemoActivity extends FragmentActivity {
 
     Button submitBtn;
     String node_key;

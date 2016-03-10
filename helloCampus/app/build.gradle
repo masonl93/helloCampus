@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "msj.hellocampus_android"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -35,4 +35,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.google.android.gms:play-services-maps:8.4.0'
     compile 'com.firebase:geofire:1.1.0'
+    compile 'com.squareup:seismic:1.0.2'
 }

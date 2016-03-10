@@ -6,7 +6,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.hardware.SensorManager;
 import android.location.Location;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -17,32 +19,45 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.content.Intent;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
+import com.squareup.seismic.ShakeDetector;
+
+import java.util.ArrayList;
 
 
-
-public class MainActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MainActivity extends FragmentActivity implements GeoQueryEventListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ShakeDetector.Listener {
 
     private Node node_temp = null;
     private GoogleApiClient mGoogleApiClient;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private LocationRequest mLocationRequest;
     public static final String TAG = Activity.class.getSimpleName();
-    private double lat, lng;
     private Location user_location;
     private Button mapsBtn;
     private boolean near_node = true;
+    ImageView logo;
+    private GeoFire geoFire;
+    private GeoQuery geoQuery;
+    double radius;
+    ArrayList<Node> nearest_nodes;
+    double dist_to_nearest_node;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +66,18 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
         final Firebase mNodesRef = new Firebase(getResources().getString(R.string.firebase_url)).child("nodes");
 
         setContentView(R.layout.activity_main);
+
+        nearest_nodes = new ArrayList<Node>();
+
+        //ADDED BY JAY
+        //sensor code
+        SensorManager sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        ShakeDetector sd = new ShakeDetector(this);
+        sd.start(sensorManager);
+
+        logo = (ImageView)findViewById(R.id.logo);
+
+        radius = 0.01; //10 meters
 
         //initialize googleApiClient
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -71,10 +98,8 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, MapsActivity.class);
                 Bundle b = new Bundle();
-                b.putDouble("lat", lat);
-                System.out.println("lat: " + lat);
-                System.out.println("lng: " + lng);
-                b.putDouble("lng", lng);
+                b.putDouble("lat", user_location.getLatitude());
+                b.putDouble("lng", user_location.getLongitude());
                 i.putExtras(b);
                 startActivity(i);
                 // Starts an intent for the sign up activity
@@ -87,6 +112,10 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                 boolean handled = false;
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     final String input = editText.getText().toString();
+                    if (ContextCompat.checkSelfPermission(editText.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        System.out.println("Permissions are chill.");
+                    }
+                    user_location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
                     mNodesRef.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
@@ -96,10 +125,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                                 System.out.println(node.getId());
                                 if (node.getId().equals(input)) {
                                     // Determine how far the user is from the node
-                                    Location node_location = new Location("");
-                                    node_location.setLatitude(node.getLatitude());
-                                    node_location.setLongitude(node.getLongitude());
-                                    float dist_in_meters = node_location.distanceTo(user_location);
+                                    float dist_in_meters = dist_user_to_node(node);
                                     // if more than 50 meters, then either not close enough
                                     // or we are close enough but there are two nodes with
                                     // same ID codes
@@ -181,8 +207,8 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
                         Intent i = new Intent(MainActivity.this, CreateNodeActivity.class);
                         Bundle b = new Bundle();
                         b.putString("key", id);
-                        b.putDouble("lat", lat);
-                        b.putDouble("lng", lng);
+                        b.putDouble("lat", user_location.getLatitude());
+                        b.putDouble("lng", user_location.getLongitude());
                         i.putExtras(b);
                         dialog.dismiss();
                         startActivity(i);
@@ -226,6 +252,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         } else {
             handleNewLocation(location);
+            start_geoFire_query();
         }
     }
 
@@ -250,8 +277,6 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
     }
 
     private void handleNewLocation(Location location) {
-        lat = location.getLatitude();
-        lng = location.getLongitude();
         user_location = location;
         Log.d(TAG, location.toString());
     }
@@ -274,5 +299,121 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.Co
     @Override
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
+        geoQuery.removeAllListeners();
+        start_geoFire_query();
     }
+
+    public void start_geoFire_query() {
+        geoFire = new GeoFire(new Firebase(getResources().getString(R.string.firebase_url)).child("_geofire"));
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            System.out.println("Permissions are chill.");
+        }
+        user_location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        geoQuery = geoFire.queryAtLocation(new GeoLocation(user_location.getLatitude(), user_location.getLongitude()), radius);
+        geoQuery.addGeoQueryEventListener(this);
+    }
+
+
+    private int tmp = 1;
+    //ADDED BY JAY - add dependency in build.gradle
+    @Override
+    public void hearShake() {
+        if (nearest_nodes.get(0) != null) {
+            int index = (int)(Math.random() * nearest_nodes.size());
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                System.out.println("Permissions are chill.");
+            }
+            user_location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            dist_to_nearest_node = dist_user_to_node(nearest_nodes.get(index));
+            //Toast.makeText(this, String.format("FIND ME! I am a %s and am %.2f meters away from you", nearest_node_type, dist_to_nearest_node), Toast.LENGTH_SHORT).show();
+            final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            alertDialog.setTitle("FIND ME!");
+            alertDialog.setMessage(String.format("I am a %s, they call me '%s', and I'm %.2f meters away from you", nearest_nodes.get(index).getType(), nearest_nodes.get(index).getName(), dist_to_nearest_node));
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            tmp = 1;
+                        }
+                    });
+            if (tmp == 1) {
+                alertDialog.show();
+                tmp = 0;
+            }
+
+        }
+        else{
+            Toast.makeText(this, "Sorry, no nodes were found nearby. Add some new nodes!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public float dist_user_to_node(Node n) {
+        float dist_in_meters;
+
+        Location node_location = new Location("");
+        node_location.setLatitude(n.getLatitude());
+        node_location.setLongitude(n.getLongitude());
+        dist_in_meters = node_location.distanceTo(user_location);
+
+        return dist_in_meters;
+    }
+
+    // GeoFire event listeners
+    @Override
+    public void onKeyEntered(String key, GeoLocation location) {
+        System.out.println(String.format("Key %s entered the search area at [%f,%f]", key, location.latitude, location.longitude));
+        Firebase ref = new Firebase(getResources().getString(R.string.firebase_url)).child("nodes").child(key);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Node n = dataSnapshot.getValue(Node.class);
+                nearest_nodes.add(n);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        /*
+        if (nearest_node_type == null) {
+            Firebase ref = new Firebase(getResources().getString(R.string.firebase_url)).child("nodes").child(key);
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Node n = dataSnapshot.getValue(Node.class);
+                    nearest_node_type = n.getType();
+                    dist_to_nearest_node = dist_user_to_node(n);
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }*/
+    }
+
+    @Override
+    public void onKeyExited(String key) {
+        System.out.println(String.format("Key %s is no longer in the search area", key));
+    }
+
+    @Override
+    public void onKeyMoved(String key, GeoLocation location) {
+        System.out.println(String.format("Key %s moved within the search area to [%f,%f]", key, location.latitude, location.longitude));
+    }
+
+    @Override
+    public void onGeoQueryReady() {
+        System.out.println("All initial data has been loaded and events have been fired!");
+    }
+
+    @Override
+    public void onGeoQueryError(FirebaseError error) {
+        System.err.println("There was an error with this query: " + error);
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package msj.hellocampus_android;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,7 @@ import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewNodeActivity extends AppCompatActivity {
+public class ViewNodeActivity extends FragmentActivity {
 
     private Node node = null;
     private String node_key = null;
