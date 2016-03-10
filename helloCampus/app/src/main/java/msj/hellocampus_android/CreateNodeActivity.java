@@ -85,4 +85,9 @@ public class CreateNodeActivity extends FragmentActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent((this), MainActivity.class));
+    }
 }

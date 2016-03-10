@@ -7,6 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".createNodeActivity">
 
     <TextView
@@ -16,9 +18,10 @@
         android:text="Node ID#:"
         android:id="@+id/idCode"
         android:textStyle="bold"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:textSize="25dp"
+        android:layout_alignTop="@+id/node_id"
+        android:layout_alignStart="@+id/textView3"
+        android:layout_above="@+id/textView3" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,11 +29,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Node Nickname:"
         android:id="@+id/textView"
-        android:layout_below="@+id/spinner_type"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:textStyle="bold"
-        android:paddingTop="10dp" />
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/create_node"
+        android:textSize="25dp"
+        android:paddingBottom="25dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -43,7 +46,9 @@
         android:layout_toEndOf="@+id/textView2"
         android:textStyle="italic"
         android:inputType="textNoSuggestions|textFilter|text"
-        android:textCursorDrawable="@null"/>
+        android:textCursorDrawable="@null"
+        android:paddingBottom="25dp"
+        android:textSize="25dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,10 +57,9 @@
         android:text="Memo Description"
         android:id="@+id/textView2"
         android:textStyle="bold"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/editText_name"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="26dp" />
+        android:textSize="25dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -68,7 +72,8 @@
         android:background="@layout/button_default_bg"
         android:textStyle="bold"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        />
 
     <EditText
         android:layout_width="wrap_content"
@@ -77,18 +82,20 @@
         android:ems="10"
         android:id="@+id/editText_memo"
         android:shadowColor="#a6a6a6"
-        android:hint="Leave a message for future users to read!"
+        android:hint="Leave a message for future exploers to read!"
         android:background="@drawable/shape"
         android:maxLength="255"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_above="@+id/create_node"
-        android:layout_below="@+id/textView2"
         android:textAlignment="center"
         android:textStyle="italic"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textCursorDrawable="@null"/>
+        android:textCursorDrawable="@null"
+        android:backgroundTint="#4f4f4f"
+        android:layout_below="@+id/textView2"
+        android:textSize="25dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -96,9 +103,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="ID Placeholder"
         android:id="@+id/node_id"
-        android:layout_alignTop="@+id/idCode"
-        android:layout_toRightOf="@+id/textView2"
-        android:layout_toEndOf="@+id/textView2" />
+        android:textSize="25dp"
+        android:layout_above="@+id/textView3"
+        android:layout_alignStart="@+id/spinner_type"
+        android:layout_marginBottom="60dp" />
 
     <Spinner
         android:layout_width="match_parent"
@@ -107,10 +115,8 @@
         android:entries="@array/dropdown_choices"
         android:spinnerMode="dialog"
         android:prompt="@string/dropdown_hint"
-        android:layout_below="@+id/node_id"
-        android:layout_alignLeft="@+id/editText_name"
-        android:layout_alignStart="@+id/editText_name"
-        android:layout_marginTop="34dp" />
+        android:layout_above="@+id/textView"
+        android:layout_alignStart="@+id/editText_name" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -119,8 +125,17 @@
         android:text="Type of Node:"
         android:id="@+id/textView3"
         android:textStyle="bold"
+        android:textSize="25dp"
         android:layout_alignTop="@+id/spinner_type"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignStart="@+id/textView"
+        android:layout_above="@+id/editText_name" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageview_flag"
+        android:src="@drawable/mainactivitylogo"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

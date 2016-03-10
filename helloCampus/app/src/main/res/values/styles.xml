@@ -10,7 +10,12 @@
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="android:colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/primary_text_material_dark</item>
-
+        <item name="android:spinnerItemStyle">
+            @style/spinnerItemStyle
+        </item>
+        <item name="android:spinnerDropDownItemStyle">
+            @style/spinnerDropDownItemStyle
+        </item>
     </style>
 
     <style name="CKButton" parent="android:style/Widget.Button">
@@ -41,5 +46,18 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
     </style>
+
+        <style name="spinnerItemStyle">
+            <item name="android:padding">10dp</item>
+            <item name="android:textSize">25sp</item>
+            <item name="android:textColor">#FFFFFF</item>
+        </style>
+
+        <style name="spinnerDropDownItemStyle">
+            <item name="android:padding">10dp</item>
+            <item name="android:textSize">20sp</item>
+            <item name="android:textColor">#FFFFFF</item>
+        </style>
+
 
 </resources>

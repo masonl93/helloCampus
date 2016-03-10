@@ -37,7 +37,7 @@ public class MemoListActivity extends ListActivity {
         Firebase.setAndroidContext(this);
         Firebase mMemosRef = new Firebase(getResources().getString(R.string.firebase_url)).child("nodes").child(node_key).child("memos");
 
-        mAdapter = new FirebaseListAdapter<Memo>(this, Memo.class, layout.two_line_list_item, mMemosRef) {
+        mAdapter = new FirebaseListAdapter<Memo>(this, Memo.class, R.layout.listviewtext, mMemosRef) {
             @Override
             protected void populateView(View view, Memo memo, int position) {
                 //replace 'node.getX' with memo.getTitle OR memo.getMemo

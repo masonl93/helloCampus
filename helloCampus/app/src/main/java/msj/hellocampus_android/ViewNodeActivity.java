@@ -30,6 +30,7 @@ public class ViewNodeActivity extends FragmentActivity {
     Button viewMemo;
     TextView textView_memo;
     Firebase mRef;
+    private int memo_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +75,12 @@ public class ViewNodeActivity extends FragmentActivity {
 
                 // Inserting the most recent memo for the Node into the view
                 textView_memo = (TextView) findViewById(R.id.textView_memo);
-                mRef.child("nodes").child(node_key).child("memos").limitToLast(1).addValueEventListener(new ValueEventListener() {
+                //mRef.child("nodes").child(node_key).child("memos").limitToLast(1).addValueEventListener(new ValueEventListener() {
+                mRef.child("nodes").child(node_key).child("memos").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
                         System.out.println("There are " + snapshot.getChildrenCount() + " memos");
-
+                        memo_count = (int)snapshot.getChildrenCount();
                         for (DataSnapshot nodeSnapshot : snapshot.getChildren()) {
                             Memo m = nodeSnapshot.getValue(Memo.class);
                             memo = m.getMessage();
@@ -88,6 +90,7 @@ public class ViewNodeActivity extends FragmentActivity {
                         //System.out.println(memos);
                         //memo = memos.get(memos.size() - 1);
                         textView_memo.setText(memo);
+                        viewMemo.setText(String.format("View Memos (%d)", memo_count));
                     }
 
                     @Override
@@ -127,9 +130,9 @@ public class ViewNodeActivity extends FragmentActivity {
         }
     };
 
-/*    @Override
+    @Override
     public void onBackPressed(){
         startActivity(new Intent((this), MainActivity.class));
     }
-*/
+
 }

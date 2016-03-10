@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">helloCampus</string>
-    <string name="search_hint">Search...</string>
+    <string name="search_hint">Enter a unique node ID...</string>
     <string-array name="dropdown_choices">
         <item>Light Post</item>
-        <item>Trash Can</item>
+        <item>Classroom Door</item>
         <item>Utility Box</item>
         <item>Water Fountain</item>
         <item>Other</item>

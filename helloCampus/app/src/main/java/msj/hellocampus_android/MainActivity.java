@@ -184,6 +184,7 @@ public class MainActivity extends FragmentActivity implements GeoQueryEventListe
                         i.putExtras(b);
                         dialog.dismiss();
                         startActivity(i);
+                        //finish();
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "No",
@@ -212,6 +213,7 @@ public class MainActivity extends FragmentActivity implements GeoQueryEventListe
                         i.putExtras(b);
                         dialog.dismiss();
                         startActivity(i);
+                        //finish();
                     }
                 });
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "No",
@@ -285,6 +287,11 @@ public class MainActivity extends FragmentActivity implements GeoQueryEventListe
     protected void onResume() {
         super.onResume();
         mGoogleApiClient.connect();
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            System.out.println("Permissions are chill.");
+        }
+        user_location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+      
     }
 
     @Override

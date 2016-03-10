@@ -26,7 +26,8 @@
             android:padding="10dp"
             android:hint="Email"
             android:textColorHint="#bbbbbb"
-            android:drawableLeft="@drawable/email"/>
+            android:drawableLeft="@drawable/email"
+            android:textColor="#000000" />
         <EditText
             android:id="@+id/etUserName"
             android:layout_width="match_parent"
@@ -36,7 +37,8 @@
             android:padding="10dp"
             android:hint="User Name"
             android:textColorHint="#bbbbbb"
-            android:drawableLeft="@drawable/user"/>
+            android:drawableLeft="@drawable/user"
+            android:textColor="#000000" />
         <EditText
             android:id="@+id/etPass"
             android:layout_width="match_parent"
@@ -47,7 +49,8 @@
             android:hint="Password"
             android:textColorHint="#bbbbbb"
             android:password="true"
-            android:drawableLeft="@drawable/password"/>
+            android:drawableLeft="@drawable/password"
+            android:textColor="#000000" />
         <Button
             android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
